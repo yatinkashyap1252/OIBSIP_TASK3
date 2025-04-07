@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Temperature Converter</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #040021;
+        font-family: Arial, sans-serif;
+      }
+
+      section {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+
+      section::after {
+        content: "";
+        display: block;
+        background-color: #ff00c3;
+        width: 150%;
+        height: 150%;
+        border-radius: 50%;
+        box-shadow: 0 0 25px 5px #ff00c3;
+        /* transform: translate(500px,-400px); */
+        animation: animateposition 5s linear infinite;
+      }
+
+      @keyframes animateposition {
+        0% {
+          transform: translate(-340px, -200px); /* Starting position */
+        }
+        25% {
+          transform: translate(200px, 120px); /* Starting position */
+        }
+        65% {
+          transform: translate(
+            700px,
+            -400px
+          ); /* Move 100px right and 100px down */
+        }
+        100% {
+          transform: translate(
+            -340px,
+            -200px
+          ); /* Return to the starting position */
+        }
+      }
+
+      section::before {
+        content: "";
+        display: block;
+        background-color: #d46d00;
+        width: 200%;
+        height: 200%;
+        border-radius: 50%;
+        box-shadow: 0 0 25px 5px #d46d00;
+        /* transform: translate(0,100px); */
+        animation: animate 5s linear infinite;
+      }
+
+      @keyframes animate {
+        0% {
+          transform: translate(730px, 0);
+        }
+        25% {
+          transform: translate(550px, -250px);
+        }
+        50% {
+          transform: translate(-400px, -200px);
+        }
+        75% {
+          transform: translate(200px, 150px);
+        }
+        100% {
+          transform: translate(730px, 0);
+        }
+      }
+
+      .container {
+        background: rgba(255, 255, 255, 0.251); /* Glass effect */
+        backdrop-filter: blur(10px); /* Blur effect */
+        -webkit-backdrop-filter: blur(10px); /* Safari support */
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        width: 40vw;
+        height: 60vh;
+        text-align: center;
+        z-index: 10;
+        border: 3px solid rgba(255, 255, 255, 0.333); /* Subtle border */
+      }
+
+      .formstyle {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      input {
+        width: 80%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: none;
+        border-radius: 5px;
+        outline: none;
+        text-align: center;
+        font-size: 16px;
+      }
+
+      button {
+        background-color: #ff00c3;
+        color: white;
+        font-weight: 800;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 20px;
+      }
+
+      button:hover {
+        background-color: #a70080;
+      }
+
+      .toggle-button {
+        background-color: #fff;
+        color: #040021;
+        padding: 5px 10px;
+        margin-top: 10px;
+        border-radius: 50%;
+        cursor: pointer;
+        position: absolute;
+        top: 100px;
+        color: #000;
+        font-weight: 700;
+        font-size: 18px;
+      }
+
+      .toggle-button:hover {
+        background-color: #ff8400;
+        color: #fff;
+      }
+
+      .result-box {
+        margin-top: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <section></section>
+    <div class="container">
+      <p
+        style="
+          font-size: 35px;
+          margin-bottom: 10px;
+          font-weight: 800;
+          color: #ffffff;
+        "
+      >
+        Temperature Converter
+      </p>
+      <p style="color: #cecece; margin-bottom: 10px">
+        Convert Celsius and Fahrenheit and vice versa
+      </p>
+      <form id="tempForm" class="formstyle">
+        <div
+          style="
+            width: 90%;
+            height: 15%;
+            background-color: #fb8500;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin: 20px 0;
+          "
+        >
+          <p
+            style="font-size: 60px; font-weight: 700; color: #ffffff"
+            id="resultBox"
+          >
+            0
+          </p>
+        </div>
+        <input
+          type="number"
+          id="tempInput"
+          placeholder="Enter Temperature"
+          required
+        />
+        <button type="submit">Convert</button>
+        <div class="toggle-button" id="toggleButton">F</div>
+      </form>
+      <!-- <div class="result-box" id="resultBox"></div> -->
+    </div>
+
+    <script>
+      let isCelsiusToFahrenheit = true; // Flag to track the conversion direction
+
+      // Toggle button to switch conversion direction
+      document
+        .getElementById("toggleButton")
+        .addEventListener("click", function () {
+          isCelsiusToFahrenheit = !isCelsiusToFahrenheit;
+          this.innerText = isCelsiusToFahrenheit ? "F" : "C";
+        });
+
+      document
+        .getElementById("tempForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent form submission
+
+          let inputValue = parseFloat(
+            document.getElementById("tempInput").value
+          );
+          if (isNaN(inputValue)) {
+            document.getElementById("resultBox").innerText =
+              "Please enter a valid number!";
+            return;
+          }
+
+          let result;
+          if (isCelsiusToFahrenheit) {
+            // Celsius to Fahrenheit
+            result = (inputValue * 9) / 5 + 32;
+            document.getElementById("resultBox").innerText = `${result.toFixed(
+              2
+            )}°F`;
+          } else {
+            // Fahrenheit to Celsius
+            result = ((inputValue - 32) * 5) / 9;
+            document.getElementById("resultBox").innerText = `${result.toFixed(
+              2
+            )}°C`;
+          }
+        });
+    </script>
+  </body>
+</html>
